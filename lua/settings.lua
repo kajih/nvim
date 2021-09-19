@@ -16,7 +16,9 @@ utils.opt('w', 'number', true)
 -- utils.opt('w', 'relativenumber', true)
 
 utils.opt('o', 'clipboard','unnamed,unnamedplus')
-utils.opt('o', 'completeopt', "menuone,noinsert,noselect" )    -- Completion options
+--utils.opt('o', 'completeopt', "menuone,noinsert,noselect" )    -- Completion options
+utils.opt('o', 'completeopt', "menu,menuone,noselect" )    -- Completion options in cmp
+
 utils.opt('o', 'cursorline', true)
 utils.opt('o', 'formatoptions', 'crqnj')        -- Automatic formatting options
 utils.opt('o', 'hidden', true)
@@ -54,4 +56,3 @@ utils.opt('o', 'undofile', true)
 
 -- Highlight on yank
 vim.cmd 'au TextYankPost * lua vim.highlight.on_yank {on_visual = false}'
-

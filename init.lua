@@ -1,7 +1,3 @@
--- neovim config borrowed from ojroques and mjlbach
--- github.com/kajih
-
--------------------- HELPERS -------------------------------
 local utils = require('utils')  -- Utillity functions, like opt,map and autogroup
 
 local api, cmd, fn, g = vim.api, vim.cmd, vim.fn, vim.g
@@ -14,7 +10,8 @@ local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
   print("Bootstrapping packer to", install_path)
   fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
-  cmd [[ quit! ]]
+  cmd 'packadd packer.nvim'
+  -- cmd [[ quit! ]]
 end
 
 api.nvim_exec(
@@ -23,7 +20,7 @@ api.nvim_exec(
     autocmd!
     autocmd BufWritePost init.lua PackerCompile
   augroup end
-]],
+  ]],
   false
 )
 
@@ -31,22 +28,28 @@ api.nvim_exec(
 
 local use = require('packer').use
 require('packer').startup(function()
+
   use 'wbthomason/packer.nvim' -- Package manager
+  use 'nvim-lua/plenary.nvim'
+  use 'b0o/mapx.nvim'
 
   -- use 'kdheepak/lazygit.nvim'
   -- use 'tpope/vim-fugitive' -- Git commands in nvim
   -- use 'tpope/vim-rhubarb' -- Fugitive-companion to interact with github
-  --
-  use { 'nvim-treesitter/nvim-treesitter', branch = 'master', run = ':TSUpdate' }
-  use { 'nvim-treesitter/nvim-treesitter-textobjects', branch = 'master', requires = { 'nvim-treesitter/nvim-treesitter' } }
-  use 'nvim-lua/plenary.nvim'
 
-  use { 'TimUntersberger/neogit', requires = { 'nvim-lua/plenary.nvim' } }
+  use { 
+    'nvim-treesitter/nvim-treesitter',
+    branch = 'master',
+    run = ':TSUpdate',
+    requires = {
+      {'nvim-treesitter/nvim-treesitter-textobjects', branch = 'master'}
+    },
+    config = [[ require('plugins/treesitter') ]],
+  }
+
+  use { 'sindrets/diffview.nvim', requires = { 'kyazdani42/nvim-web-devicons' } }
+  use { 'TimUntersberger/neogit', requires = { 'nvim-lua/plenary.nvim', 'sindrets/diffview.nvim' } }
   use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }
-
-  -- Dont need tags with lsp?
-  -- use 'ludovicchabant/vim-gutentags' -- Automatic tags management
-  -- use 'weilbith/nvim-lsp-smag'  -- tags
 
   use 'flazz/vim-colorschemes'
   use 'norcalli/nvim-colorizer.lua'
@@ -54,24 +57,45 @@ require('packer').startup(function()
   use 'neovim/nvim-lspconfig'
   use 'williamboman/nvim-lsp-installer'
 
-  use { 'simrat39/rust-tools.nvim', requires = { 'neovim/nvim-lspconfig', 'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope.nvim', 'mfussenegger/nvim-dap' } }
-  use { 'Saecki/crates.nvim', requires = { 'nvim-lua/plenary.nvim' } }
-  use 'ray-x/go.nvim'
+  --[[ Refactoring is under heavy development currently, mostly usefull for typescript
+  use {
+    "ThePrimeagen/refactoring.nvim",
+    requires = {
+        {"nvim-lua/plenary.nvim"},
+        {"nvim-treesitter/nvim-treesitter"}
+    },
+  }
+  ]]
 
-  use 'sbdchd/neoformat'        -- code format?
-  
-  use { 'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim' } }
-  use { 'nvim-telescope/telescope-dap.nvim', requires = { 'nvim-telescope/telescope.nvim' } }
-
-  -- use 'junegunn/fzf';  -- Using Telescope for now
-  -- use 'junegunn/fzf.vim';
+  use {
+    'ThePrimeagen/harpoon',
+    requires = {"nvim-lua/plenary.nvim"},
+    config = [[ require("harpoon").setup({}) ]],
+  }
 
   -- Debugging
-  use { 'mfussenegger/nvim-dap'}
-  use { 'rcarriga/nvim-dap-ui', requires = { 'mfussenegger/nvim-dap'} }
-  use { 'theHamsta/nvim-dap-virtual-text', requires = { 'mfussenegger/nvim-dap'} }
+  use {'mfussenegger/nvim-dap'}
+  use {'leoluz/nvim-dap-go'}
+  use {'rcarriga/nvim-dap-ui', requires = { 'mfussenegger/nvim-dap'}}
+  use {'theHamsta/nvim-dap-virtual-text', requires = { 'mfussenegger/nvim-dap'}}
 
-  use 'L3MON4D3/LuaSnip'      -- Snippets plugin
+  use {'simrat39/rust-tools.nvim', requires = { 'neovim/nvim-lspconfig', 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope.nvim', 'mfussenegger/nvim-dap' } }
+  use {'Saecki/crates.nvim', requires = { 'nvim-lua/plenary.nvim' } }
+  use {'ray-x/go.nvim' }
+
+  use {'sbdchd/neoformat'}        -- code format?
+  use {'duane9/nvim-rg'}
+
+  use { -- Find, Filter, Preview, Pick. All lua, all the time.
+    'nvim-telescope/telescope.nvim',
+    requires = {
+      {'nvim-lua/plenary.nvim'},
+      {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }, -- FZF sorter for telescope written in c
+      {'brandoncc/telescope-harpoon.nvim'},
+      {'nvim-telescope/telescope-dap.nvim'}
+    },
+    config = [[ require('plugins/telescope') ]],
+  }
 
   use 'hrsh7th/nvim-cmp'      -- A completion plugin for neovim
   use 'hrsh7th/cmp-buffer'    -- cmp-source
@@ -80,44 +104,104 @@ require('packer').startup(function()
   use 'hrsh7th/cmp-path'      --
   use 'saadparwaiz1/cmp_luasnip'
 
-  use 'ray-x/lsp_signature.nvim'  -- TODO
+  -- better way to config plugins?
+  use { -- Snippet Engine for Neovim written in Lua.
+    'L3MON4D3/LuaSnip',
+    requires = {
+      "rafamadriz/friendly-snippets",   -- Snippets collection for a set of different programming languages for faster development.
+    },
+    config = [[ require('snippets') ]],
+  }
+
+  use 'ray-x/lsp_signature.nvim'
 
   use 'romainl/vim-devdocs'
   use 'folke/which-key.nvim'
-  
-  use 'kyazdani42/nvim-tree.lua'
+
+  use {
+    'tamago324/lir.nvim',
+    requires = {
+      'kyazdani42/nvim-web-devicons',
+      'nvim-lua/plenary.nvim',
+      'tamago324/lir-mmv.nvim',
+      'tamago324/lir-bookmark.nvim',
+      'tamago324/lir-git-status.nvim',
+    },
+    config = [[ require('plugins/lir') ]],
+  }
 
   use 'p00f/nvim-ts-rainbow'
   use 'mbbill/undotree'
 
-  use 'ctrlpvim/ctrlp.vim'
+  -- use 'Raimondi/delimitMate'
+  use { -- A super powerful autopairs for Neovim. It support multiple character.
+    'windwp/nvim-autopairs',
+    config = [[ require('plugins/autopairs') ]]
+  }
 
-  use 'Raimondi/delimitMate'
+  use { -- Maximizes and restores the current window in Vim
+    'szw/vim-maximizer',
+    config = [[ require('plugins/maximizer') ]]
+  }
+
   use 'ahmedkhalf/project.nvim'
   use 'bronson/vim-trailing-whitespace'
 
-  use 'winston0410/commented.nvim'
+  -- use 'RishabhRD/popfix'
 
-  use 'ojroques/nvim-buildme'
-  -- use 'ojroques/nvim-hardline'
-  -- use 'ojroques/nvim-bufbar'
+  use { -- Smart and powerful comment plugin for neovim. Supports commentstring, dot repeat, left-right/up-down motions, hooks, and more
+    'numToStr/Comment.nvim',
+    config = [[ require('plugins/comment_nvim') ]]
+  }
 
-  use 'RishabhRD/popfix'
+  use {  -- A surround text object plugin for neovim written in lua.
+    'blackcauldron7/surround.nvim',
+    config = [[ require"surround".setup {mappings_style = "sandwich"} ]]
+  }
 
-  use { 'SmiteshP/nvim-gps', requires = 'nvim-treesitter/nvim-treesitter' }
-  use { 'ellisonleao/glow.nvim', run = function () require('glow').download_glow() end }
+  use { -- No-nonsense floating terminal plugin for neovim
+    "numtostr/FTerm.nvim",
+    config = [[ require('plugins/fterm_nvim') ]]
+  }
+
+  use {
+    'SmiteshP/nvim-gps',
+    requires = 'nvim-treesitter/nvim-treesitter'
+  }
+
+  use {
+    'ellisonleao/glow.nvim',
+    run = function () require('glow').download_glow() end
+  }
 
   use 'ryanoasis/vim-devicons' -- Mostly used in status line I think
   use 'kyazdani42/nvim-web-devicons'  -- for file icons
-  use { 'famiu/feline.nvim', requires = { 'kyazdani42/nvim-web-devicons', 'lewis6991/gitsigns.nvim', 'nvim-lua/plenary.nvim'} }
 
-  --  'ojroques/nvim-lspfuzzy';
+  use {
+    'famiu/feline.nvim',
+    requires = { 
+      'kyazdani42/nvim-web-devicons',
+      'lewis6991/gitsigns.nvim',
+      'nvim-lua/plenary.nvim'
+    },
+    config = [[ require('feline').setup({}) ]]
+  }
+
+  use { -- Uses treesitter
+    'code-biscuits/nvim-biscuits',
+    config = [[ require('nvim-biscuits').setup({}) ]]
+  }
 
   use 'danilamihailov/beacon.nvim'
+  use 'pianocomposer321/yabs.nvim'
 
 end)
 
 -------------------- PLUGIN SETUP --------------------------
+-- Which-Key.nvim
+require("which-key").setup()
+require('mapx').setup({ global = true, whichkey = true })
+
 require('keymap')
 require('settings')
 require('langserv_cfg')
@@ -128,10 +212,47 @@ require("crates").setup()
 
 require('go').setup()
 
-require('dap_cfg') -- Debugging
--- require('navigator').setup() --lspSaga replacement
+require('plugins/dap') -- Debugging
 
-require('neogit').setup()
+local neogit = require('neogit')
+neogit.setup({
+  disable_signs = false,
+  disable_hint = false,
+  disable_context_highlighting = false,
+  disable_commit_confirmation = true,
+  auto_refresh = true,
+  disable_builtin_notifications = false,
+  disable_insert_on_commit = false,
+  commit_popup = {
+      kind = "split",
+  },
+  -- Change the default way of opening neogit
+  kind = "tab",
+  -- customize displayed signs
+  signs = {
+    -- { CLOSED, OPENED }
+    section = { ">", "v" },
+    item = { ">", "v" },
+    hunk = { "H", "U" },
+  },
+  integrations = {
+    -- Neogit only provides inline diffs. If you want a more traditional way to look at diffs, you can use `sindrets/diffview.nvim`.
+    -- The diffview integration enables the diff popup, which is a wrapper around `sindrets/diffview.nvim`.
+    diffview = true
+  },
+  -- override/add mappings
+  mappings = {
+    -- modify status buffer mappings
+    status = {
+      -- Adds a mapping with "B" as key that does the "BranchPopup" command
+      ["B"] = "BranchPopup",
+      -- Removes the default mapping of "s"
+      -- ["s"] = "",
+    },
+  },
+})
+
+neogit.config.use_magit_keybindings()
 
 -- gitsigns / coloring / hilight
 vim.cmd 'colorscheme jellyx'
@@ -141,70 +262,19 @@ vim.cmd("highlight DiffDelete ctermfg=183 ctermbg=0 guifg=#FF3333 guibg=#000000"
 vim.cmd("highlight DiffChange ctermfg=181 ctermbg=0 guifg=#FFFF33 guibg=#000000")
 require'colorizer'.setup()
 
-require('commented').setup(
-  {
-    comment_padding = " ", -- padding between starting and ending comment symbols
-    keybindings = {n = "<leader>c", v = "<leader>c", nl = "<leader>cc"}, -- what key to toggle comment, nl is for mapping <leader>c$, just like dd for d
-    prefer_block_comment = true, -- Set it to true to automatically use block comment when multiple lines are selected
-    set_keybindings = true, -- whether or not keybinding is set on setup
-    ex_mode_cmd = "Comment" -- command for commenting in ex-mode, set it null to not set the command initially.
-  }
-)
-
--- bufbar
--- require('bufbar').setup {show_bufname = 'visible', show_flags = false}
--- require('hardline').setup {}
-
-require('feline').setup()
-
--- buildme
-utils.map('n', '<leader>bb', '<cmd>BuildMe<CR>')
-utils.map('n', '<leader>be', '<cmd>BuildMeEdit<CR>')
-utils.map('n', '<leader>bs', '<cmd>BuildMeStop<CR>')
+-- require('bufferline').setup()
 
 -------------------- TREE-SITTER ---------------------------
---[[
-  require('nvim-treesitter.configs').setup {}
-]]--
-
 -- Code folding
 utils.opt('o', 'foldlevel', 10)
-utils.opt('o', 'foldmethod', 'indent')
+utils.opt('o', 'foldmethod', 'expr')
+utils.opt('o', 'foldexpr', 'nvim_treesitter#foldexpr()')
 
-require('nvim-treesitter.configs').setup {
-  ensure_installed = 'maintained',
-  highlight = {enable = true},
-  textobjects = {
-    select = {
-      enable = true,
-      keymaps = {
-        ['aa'] = '@parameter.outer', ['ia'] = '@parameter.inner',
-        ['af'] = '@function.outer', ['if'] = '@function.inner',
-        ['ac'] = '@class.outer', ['ic'] = '@class.inner',
-      },
-    },
-    swap = {
-      enable = true,
-      swap_next = {['<leader>a'] = '@parameter.inner'},
-      swap_previous = {['<leader>A'] = '@parameter.inner'},
-    },
-    move = {
-      enable = true,
-      set_jumps = true,
-      goto_next_start = {[']a'] = '@parameter.outer', [']f'] = '@function.outer', [']c'] = '@class.outer'},
-      goto_next_end = {[']A'] = '@parameter.outer', [']F'] = '@function.outer', [']C'] = '@class.outer'},
-      goto_previous_start = {['[a'] = '@parameter.outer', ['[f'] = '@function.outer', ['[c'] = '@class.outer'},
-      goto_previous_end = {['[A'] = '@parameter.outer', ['[F'] = '@function.outer', ['[C'] = '@class.outer'},
-    },
-  },
-}
-
--- Which-Key.nvim
-require("which-key").setup()
-
--- Telescope
-require('telescope').setup()
--- require('telescope').load_extension('dap')
+-- To get fzf loaded and working with telescope, you need to call
+-- load_extension, somewhere after setup function:
+require('telescope').load_extension('fzf')
+require('telescope').load_extension('dap')
+require('telescope').load_extension('projects')
 
 -- Project management
 require("project_nvim").setup {
@@ -231,104 +301,12 @@ require("project_nvim").setup {
   silent_chdir = false,
 }
 
-require('telescope').load_extension('projects')
-
+-- Status line helper
 local gps = require("nvim-gps")
 gps.setup()
 
--- buildme
-map('n', '<leader>bb', '<cmd>BuildMe<CR>')
-map('n', '<leader>be', '<cmd>BuildMeEdit<CR>')
-map('n', '<leader>bs', '<cmd>BuildMeStop<CR>')
-
---[[
-
--- fzf
-g['fzf_action'] = {['ctrl-s'] = 'split', ['ctrl-v'] = 'vsplit'}
-map('n', '<leader>/', '<cmd>BLines<CR>')
-map('n', '<leader>f', '<cmd>Files<CR>')
-map('n', '<leader>;', '<cmd>History:<CR>')
-map('n', '<leader>r', '<cmd>Rg<CR>')
-map('n', 's', '<cmd>Buffers<CR>')
-
--- lspfuzzy
-require('lspfuzzy').setup {}
-
-]]--
-
-
--------------------- MAPPINGS ------------------------------
--- nnoremap <Leader>w :write<CR>
--- map('n', '<Leader>w', ':write<CR>', {noremap = true})
-
--- Fugitive / Git
-
--- local log = [[\%C(yellow)\%h\%Cred\%d \%Creset\%s \%Cgreen(\%ar) \%Cblue\%an\%Creset]]
---[[ Switched to neogit
-map('n', '<leader>g<space>', ':Git ')
-map('n', '<leader>gd', '<cmd>Gvdiffsplit<CR>')
-map('n', '<leader>gg', '<cmd>Git<CR>')
-map('n', '<leader>gl', fmt('<cmd>term git log --graph --all --format="%s"<CR><cmd>start<CR>', log))
-]]--
-
--- Swe Keys fix attempt
-map('n','ö','[', { noremap = false })
-map('n','ä',']', { noremap = false })
--- map('n','öö','[[', { noremap = false })
--- map('n','ää',']]', { noremap = false })
-
--- NvimTree
-map('n','<leader>pt',':NvimTreeToggle<CR>')
-map('n','<leader>ntr', ':NvimTreeRefresh<CR>')
-map('n','<leader>ntn', ':NvimTreeFindFile<CR>')
-
--- Telescope recent projects
-map('n','<leader>pp',':Telescope projects<CR>')
-
--- Buffer nav
--- noremap <leader>z :bp<CR>
--- noremap <leader>x :bn<CR>
-map('n', '<leader>z', ':bp<CR>')
-map('n', '<leader>x', ':bn<CR>')
--- Close buffer
-map('n', '<leader>bd', ':bd<CR>')
-
-
---[[
-map('n', '<C-l>', '<cmd>nohlsearch<CR>')
-map('n', '<C-w>T', '<cmd>tabclose<CR>')
-map('n', '<C-w>t', '<cmd>tabnew<CR>')
-map('n', '<S-Down>', '<C-w>2<')
-map('n', '<S-Left>', '<C-w>2-')
-map('n', '<S-Right>', '<C-w>2+')
-map('n', '<S-Up>', '<C-w>2>')
-map('n', '<leader>s', ':%s//gcI<Left><Left><Left><Left>')
-map('n', '<leader>t', '<cmd>terminal<CR>')
-map('n', '<leader>u', '<cmd>update<CR>')
-map('n', '<leader>x', '<cmd>conf qa<CR>')
-map('n', 'Q', '<cmd>lua warn_caps()<CR>')
-map('n', 'U', '<cmd>lua warn_caps()<CR>')
-map('t', '<ESC>', '&filetype == "fzf" ? "\\<ESC>" : "\\<C-\\>\\<C-n>"' , {expr = true})
-map('v', '<leader>s', ':s//gcI<Left><Left><Left><Left>')
-
--------------------- LSP -----------------------------------
-for ls, cfg in pairs({
-  bashls = {}, gopls = {}, ccls = {}, jsonls = {}, pylsp = {},
-}) do require('lspconfig')[ls].setup(cfg) end
-
-map('n', '<leader>s', '<cmd>lua vim.lsp.buf.document_symbol()<CR>')
-
 -------------------- COMMANDS ------------------------------
-function warn_caps()
-  cmd 'echohl WarningMsg'
-  cmd 'echo "Caps Lock may be on"'
-  cmd 'echohl None'
-end
 
-vim.tbl_map(function(c) cmd(fmt('autocmd %s', c)) end, {
-  'TermOpen * lua init_term()',
-  'TextYankPost * lua vim.highlight.on_yank {timeout = 200, on_visual = false}',
-  'TextYankPost * if v:event.operator is "y" && v:event.regname is "+" | OSCYankReg + | endif',
-})
-
-]]--
+-- vim.tbl_map(function(c) cmd(fmt('autocmd %s', c)) end, {
+--   'TextYankPost * if v:event.operator is "y" && v:event.regname is "+" | OSCYankReg + | endif',
+-- })

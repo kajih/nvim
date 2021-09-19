@@ -14,17 +14,19 @@ local common_on_attach = function(client, bufnr)
 
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-  
+
   buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   -- Mappings.
+  -- TODO Rewrite with mapx/nnoremap
+
   local opts = { noremap=true, silent=false }
   buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', '<A-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   buf_set_keymap('n', '<Leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<Leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<Leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
@@ -37,6 +39,12 @@ local common_on_attach = function(client, bufnr)
   buf_set_keymap('n', '<Leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 
   buf_set_keymap('n', '<leader>s', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
+
+  -- TODO New Style keymaps rewrite the rest
+  nnoremap("<leader>li", ":LspInfo<CR>", "Language Server Info")
+  nnoremap("<leader>lr", ":LspRestart<CR>", "Restart LSP")
+  nnoremap("<leader>ls", ":LspStart<CR>", "Start LSP")
+  nnoremap("<leader>lS", ":LspStop<CR>", "Stop LSP")
 
   -- Set some keybinds conditional on server capabilities
   if client.resolved_capabilities.document_formatting then
@@ -61,14 +69,32 @@ local common_on_attach = function(client, bufnr)
   end
 end
 
-lsp_installer.on_server_ready(function(server)
-  local opts = {
-      on_attach = common_on_attach,
-      flags = {
-        debounce_text_changes = 500,
-      }
-  }
+lsp_installer.settings {
+  ui = {
+    icons = {
+        server_installed = "✓",
+        server_pending = "➜",
+        server_uninstalled = "✗"
+    },
+    keymaps = {
+      toggle_server_expand = "<CR>",
+      install_server = "i",
+      update_server = "u",
+      uninstall_server = "X",
+    },
+  },
+}
 
+lsp_installer.on_server_ready(function(server)
+
+  print("Server Ready " .. server.name)
+
+  local opts = {
+    on_attach = common_on_attach,
+    flags = {
+      debounce_text_changes = 500,
+    }
+  }
   -- (optional) Customize the options passed to the server
   -- if server.name == "tsserver" then
   --     opts.root_dir = function() ... end
