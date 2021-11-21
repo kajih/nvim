@@ -7,7 +7,7 @@ local utils = require('utils')
 
 local common_on_attach = function(client, bufnr)
 
-  print("Attaching " .. client.name)
+  -- print("Attaching " .. client.name)
 
   cfg = { close_timeout = 20000, } -- 20s timeout on last signature/argument
   require "lsp_signature".on_attach(cfg, bufnr)
@@ -95,6 +95,7 @@ lsp_installer.on_server_ready(function(server)
       debounce_text_changes = 500,
     }
   }
+ 
   -- (optional) Customize the options passed to the server
   -- if server.name == "tsserver" then
   --     opts.root_dir = function() ... end

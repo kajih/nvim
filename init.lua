@@ -179,7 +179,7 @@ require('packer').startup(function()
 
   use {
     'famiu/feline.nvim',
-    requires = { 
+    requires = {
       'kyazdani42/nvim-web-devicons',
       'lewis6991/gitsigns.nvim',
       'nvim-lua/plenary.nvim'
@@ -190,6 +190,11 @@ require('packer').startup(function()
   use { -- Uses treesitter
     'code-biscuits/nvim-biscuits',
     config = [[ require('nvim-biscuits').setup({}) ]]
+  }
+
+  use {
+    'rcarriga/nvim-notify',
+    config = [[ require('notify').setup({}) ]]
   }
 
   use 'danilamihailov/beacon.nvim'
@@ -306,6 +311,21 @@ local gps = require("nvim-gps")
 gps.setup()
 
 -------------------- COMMANDS ------------------------------
+
+--[[
+
+if (string.find(vim.fn.system("uname -r"), "microsoft")) then
+  print("WSL")
+end
+
+if system('uname -r') =~ "Microsoft"
+    augroup Yank
+        autocmd!
+        autocmd TextYankPost * :call system('/mnt/c/windows/system32/clip.exe ',@")
+    augroup END
+endif
+
+]]
 
 -- vim.tbl_map(function(c) cmd(fmt('autocmd %s', c)) end, {
 --   'TextYankPost * if v:event.operator is "y" && v:event.regname is "+" | OSCYankReg + | endif',

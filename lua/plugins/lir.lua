@@ -80,6 +80,10 @@ end
 -- :lua require'lir.float'.toggle()
 -- :lua require'lir.float'.init()
 
+require('lir.git_status').setup({
+  show_ignored = true
+})
+
 vim.cmd [[augroup lir-settings]]
 vim.cmd [[  autocmd!]]
 vim.cmd [[  autocmd Filetype lir :lua LirSettings()]]
