@@ -5,48 +5,21 @@ local nvim_lsp = require('lspconfig')
 local lsp_installer = require("nvim-lsp-installer")
 local utils = require('utils')
 
+-- Callback function for when the LSP attaches
 local common_on_attach = function(client, bufnr)
-
-  -- print("Attaching " .. client.name)
+  print("Attaching " .. client.name)
+  require('langserv_keymap')
 
   cfg = { close_timeout = 20000, } -- 20s timeout on last signature/argument
-  require "lsp_signature".on_attach(cfg, bufnr)
+  require("lsp_signature").on_attach(cfg, bufnr)
 
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
   buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-  -- Mappings.
-  -- TODO Rewrite with mapx/nnoremap
-
-  local opts = { noremap=true, silent=false }
-  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  buf_set_keymap('n', '<A-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  buf_set_keymap('n', '<Leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<Leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<Leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  buf_set_keymap('n', '<Leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', '<Leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', '<Leader>aa', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  buf_set_keymap('n', '<Leader>fe', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', '<Leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-
-  buf_set_keymap('n', '<leader>s', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
-
-  -- TODO New Style keymaps rewrite the rest
-  nnoremap("<leader>li", ":LspInfo<CR>", "Language Server Info")
-  nnoremap("<leader>lr", ":LspRestart<CR>", "Restart LSP")
-  nnoremap("<leader>ls", ":LspStart<CR>", "Start LSP")
-  nnoremap("<leader>lS", ":LspStop<CR>", "Stop LSP")
-
   -- Set some keybinds conditional on server capabilities
+  local opts = { noremap=true, silent=false }
   if client.resolved_capabilities.document_formatting then
     buf_set_keymap("n", "<Leader>ff", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
   end
@@ -67,7 +40,7 @@ local common_on_attach = function(client, bufnr)
       augroup END
     ]], false)
   end
-end
+end -- //common_on_attach
 
 lsp_installer.settings {
   ui = {
@@ -85,9 +58,13 @@ lsp_installer.settings {
   },
 }
 
-lsp_installer.on_server_ready(function(server)
 
-  print("Server Ready " .. server.name)
+-- Attach Rust through 'simrat39/rust-tools.nvim'
+require('rust-tools').setup({server = { on_attach = common_on_attach }})
+require("crates").setup()
+
+-- Attach through "williamboman/nvim-lsp-installer"
+lsp_installer.on_server_ready(function(server)
 
   local opts = {
     on_attach = common_on_attach,
@@ -101,8 +78,21 @@ lsp_installer.on_server_ready(function(server)
   --     opts.root_dir = function() ... end
   -- end
 
+  if server.name == "rust_analyzer" then
+    -- print("Rust-Analyzer ready; loading Rust-Tools")
+    -- require('plugins/dap') -- Debugging
+    return -- Rust-Tools have a more advanced init
+  end
+
+  if server.name == "gopls" then
+    print("GoPls ready; loading Go")
+    -- require('langserv_keymap')
+    require('go').setup()
+    return
+  end
+
   server:setup(opts)
-  vim.cmd [[ do User LspAttachBuffers ]]
+  -- vim.cmd [[ do User LspAttachBuffers ]]
 end)
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(

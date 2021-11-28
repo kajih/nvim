@@ -30,6 +30,7 @@ local use = require('packer').use
 require('packer').startup(function()
 
   use 'wbthomason/packer.nvim' -- Package manager
+  use 'nvim-lua/popup.nvim'    -- not sure if deprecated
   use 'nvim-lua/plenary.nvim'
   use 'b0o/mapx.nvim'
 
@@ -114,9 +115,7 @@ require('packer').startup(function()
   }
 
   use 'ray-x/lsp_signature.nvim'
-
   use 'romainl/vim-devdocs'
-  use 'folke/which-key.nvim'
 
   use {
     'tamago324/lir.nvim',
@@ -203,21 +202,11 @@ require('packer').startup(function()
 end)
 
 -------------------- PLUGIN SETUP --------------------------
--- Which-Key.nvim
-require("which-key").setup()
-require('mapx').setup({ global = true, whichkey = true })
-
+require('mapx').setup({ global = true })
 require('keymap')
 require('settings')
 require('langserv_cfg')
 require('cmp_cfg') --Nvim-Compe replacement
-
-require('rust-tools').setup()
-require("crates").setup()
-
-require('go').setup()
-
-require('plugins/dap') -- Debugging
 
 local neogit = require('neogit')
 neogit.setup({
@@ -266,8 +255,6 @@ vim.cmd("highlight DiffAdd ctermfg=151 ctermbg=0 guifg=#33FF33 guibg=#000000")
 vim.cmd("highlight DiffDelete ctermfg=183 ctermbg=0 guifg=#FF3333 guibg=#000000")
 vim.cmd("highlight DiffChange ctermfg=181 ctermbg=0 guifg=#FFFF33 guibg=#000000")
 require'colorizer'.setup()
-
--- require('bufferline').setup()
 
 -------------------- TREE-SITTER ---------------------------
 -- Code folding

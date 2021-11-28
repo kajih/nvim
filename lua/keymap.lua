@@ -37,7 +37,7 @@ map('ö',']')
 
 nnoremap('<F1>', function() require("harpoon.ui").toggle_quick_menu() end)
 nnoremap('<F2>', ':Telescope projects<CR>')
-nnoremap('<F3>', ':lua require("neogit").open()<CR>', "silent")
+nnoremap('<F3>', function() require("neogit").open() end)
 
 -- Buffer nav
 -- noremap <leader>z :bp<CR>
