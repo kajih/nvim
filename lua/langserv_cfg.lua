@@ -59,6 +59,7 @@ lsp_installer.settings {
 }
 
 
+require('go').setup()
 -- Attach Rust through 'simrat39/rust-tools.nvim'
 require('rust-tools').setup({server = { on_attach = common_on_attach }})
 require("crates").setup()
@@ -82,13 +83,6 @@ lsp_installer.on_server_ready(function(server)
     -- print("Rust-Analyzer ready; loading Rust-Tools")
     -- require('plugins/dap') -- Debugging
     return -- Rust-Tools have a more advanced init
-  end
-
-  if server.name == "gopls" then
-    print("GoPls ready; loading Go")
-    -- require('langserv_keymap')
-    require('go').setup()
-    return
   end
 
   server:setup(opts)
