@@ -177,7 +177,8 @@ require('packer').startup(function()
   use 'kyazdani42/nvim-web-devicons'  -- for file icons
 
   use {
-    'famiu/feline.nvim',
+    'feline-nvim/feline.nvim',
+    branch = 'develop',
     requires = {
       'kyazdani42/nvim-web-devicons',
       'lewis6991/gitsigns.nvim',
