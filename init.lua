@@ -218,6 +218,7 @@ neogit.setup({
   auto_refresh = true,
   disable_builtin_notifications = false,
   disable_insert_on_commit = false,
+  use_magit_keybindings = true,
   commit_popup = {
       kind = "split",
   },
@@ -246,8 +247,6 @@ neogit.setup({
     },
   },
 })
-
-neogit.config.use_magit_keybindings()
 
 -- gitsigns / coloring / hilight
 vim.cmd 'colorscheme jellyx'
