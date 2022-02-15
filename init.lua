@@ -153,10 +153,13 @@ require('packer').startup(function()
     config = [[ require('plugins/comment_nvim') ]]
   }
 
-  use {  -- A surround text object plugin for neovim written in lua.
-    'Mephistophiles/surround.nvim',
-    config = [[ require"surround".setup {mappings_style = "sandwich"} ]]
+  use {
+    'machakann/vim-sandwich'
   }
+  -- use {  -- A surround text object plugin for neovim written in lua.
+  --   'Mephistophiles/surround.nvim',
+  --   config = [[ require"surround".setup {mappings_style = "sandwich"} ]]
+  -- }
 
   -- use {  -- A surround text object plugin for neovim written in lua.
   --   'blackcauldron7/surround.nvim',
