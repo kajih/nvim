@@ -154,9 +154,14 @@ require('packer').startup(function()
   }
 
   use {  -- A surround text object plugin for neovim written in lua.
-    'blackcauldron7/surround.nvim',
+    'Mephistophiles/surround.nvim',
     config = [[ require"surround".setup {mappings_style = "sandwich"} ]]
   }
+
+  -- use {  -- A surround text object plugin for neovim written in lua.
+  --   'blackcauldron7/surround.nvim',
+  --   config = [[ require"surround".setup {mappings_style = "sandwich"} ]]
+  -- }
 
   use { -- No-nonsense floating terminal plugin for neovim
     "numtostr/FTerm.nvim",
