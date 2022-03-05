@@ -83,6 +83,7 @@ require('packer').startup(function()
   use {'simrat39/rust-tools.nvim', requires = { 'neovim/nvim-lspconfig', 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope.nvim', 'mfussenegger/nvim-dap' } }
   use {'Saecki/crates.nvim', requires = { 'nvim-lua/plenary.nvim' } }
   use {'ray-x/go.nvim' }
+  use {'ray-x/guihua.lua'}
 
   use {'sbdchd/neoformat'}        -- code format?
   use {'duane9/nvim-rg'}
