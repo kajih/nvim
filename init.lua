@@ -38,7 +38,7 @@ require('packer').startup(function()
   -- use 'tpope/vim-fugitive' -- Git commands in nvim
   -- use 'tpope/vim-rhubarb' -- Fugitive-companion to interact with github
 
-  use { 
+  use {
     'nvim-treesitter/nvim-treesitter',
     branch = 'master',
     run = ':TSUpdate',
@@ -306,23 +306,3 @@ require("project_nvim").setup {
 local gps = require("nvim-gps")
 gps.setup()
 
--------------------- COMMANDS ------------------------------
-
---[[
-
-if (string.find(vim.fn.system("uname -r"), "microsoft")) then
-  print("WSL")
-end
-
-if system('uname -r') =~ "Microsoft"
-    augroup Yank
-        autocmd!
-        autocmd TextYankPost * :call system('/mnt/c/windows/system32/clip.exe ',@")
-    augroup END
-endif
-
-]]
-
--- vim.tbl_map(function(c) cmd(fmt('autocmd %s', c)) end, {
---   'TextYankPost * if v:event.operator is "y" && v:event.regname is "+" | OSCYankReg + | endif',
--- })
