@@ -80,7 +80,15 @@ require('packer').startup(function()
   use {'rcarriga/nvim-dap-ui', requires = { 'mfussenegger/nvim-dap'}}
   use {'theHamsta/nvim-dap-virtual-text', requires = { 'mfussenegger/nvim-dap'}}
 
-  use {'simrat39/rust-tools.nvim', requires = { 'neovim/nvim-lspconfig', 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope.nvim', 'mfussenegger/nvim-dap' } }
+  use {
+    'simrat39/rust-tools.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      'neovim/nvim-lspconfig',
+      'mfussenegger/nvim-dap'
+    }
+  }
   use {'Saecki/crates.nvim', requires = { 'nvim-lua/plenary.nvim' } }
   use {'ray-x/go.nvim' }
   use {'ray-x/guihua.lua'}
@@ -121,8 +129,8 @@ require('packer').startup(function()
   use {
     'tamago324/lir.nvim',
     requires = {
-      'kyazdani42/nvim-web-devicons',
       'nvim-lua/plenary.nvim',
+      'kyazdani42/nvim-web-devicons',
       'tamago324/lir-mmv.nvim',
       'tamago324/lir-bookmark.nvim',
       'tamago324/lir-git-status.nvim',
@@ -147,28 +155,14 @@ require('packer').startup(function()
   use 'ahmedkhalf/project.nvim'
   use 'bronson/vim-trailing-whitespace'
 
-  -- use 'RishabhRD/popfix'
-
   use { -- Smart and powerful comment plugin for neovim. Supports commentstring, dot repeat, left-right/up-down motions, hooks, and more
     'numToStr/Comment.nvim',
     config = [[ require('plugins/comment_nvim') ]]
   }
 
-  use {
-    'machakann/vim-sandwich'
-  }
-  -- use {  -- A surround text object plugin for neovim written in lua.
-  --   'Mephistophiles/surround.nvim',
-  --   config = [[ require"surround".setup {mappings_style = "sandwich"} ]]
-  -- }
-
-  -- use {  -- A surround text object plugin for neovim written in lua.
-  --   'blackcauldron7/surround.nvim',
-  --   config = [[ require"surround".setup {mappings_style = "sandwich"} ]]
-  -- }
+  use { 'machakann/vim-sandwich' }
 
   use { -- No-nonsense floating terminal plugin for neovim
-    "numtostr/FTerm.nvim",
     config = [[ require('plugins/fterm_nvim') ]]
   }
 
@@ -189,12 +183,13 @@ require('packer').startup(function()
     'feline-nvim/feline.nvim',
     branch = 'develop',
     requires = {
+      'nvim-lua/plenary.nvim',
       'kyazdani42/nvim-web-devicons',
       'lewis6991/gitsigns.nvim',
-      'nvim-lua/plenary.nvim'
     },
     config = [[ require('feline').setup({}) ]]
   }
+
 
   use { -- Uses treesitter
     'code-biscuits/nvim-biscuits',
