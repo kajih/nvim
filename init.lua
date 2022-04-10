@@ -190,12 +190,6 @@ require('packer').startup(function()
     config = [[ require('feline').setup({}) ]]
   }
 
-
-  use { -- Uses treesitter
-    'code-biscuits/nvim-biscuits',
-    config = [[ require('nvim-biscuits').setup({}) ]]
-  }
-
   use {
     'rcarriga/nvim-notify',
     config = [[ require('notify').setup({}) ]]
