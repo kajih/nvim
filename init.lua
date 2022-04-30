@@ -89,8 +89,17 @@ require('packer').startup(function()
       'mfussenegger/nvim-dap'
     }
   }
-  use {'Saecki/crates.nvim', requires = { 'nvim-lua/plenary.nvim' } }
-  use {'ray-x/go.nvim' }
+
+  use {
+    'Saecki/crates.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'jose-elias-alvarez/null-ls.nvim'
+    },
+    config = [[ require('plugins/crates') ]],
+  }
+
+  use {'ray-x/go.nvim'}
   use {'ray-x/guihua.lua'}
 
   use {'sbdchd/neoformat'}        -- code format?
