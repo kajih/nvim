@@ -190,7 +190,7 @@ require('packer').startup(function()
 
   use {
     'feline-nvim/feline.nvim',
-    branch = 'develop',
+    branch = 'master',
     requires = {
       'nvim-lua/plenary.nvim',
       'kyazdani42/nvim-web-devicons',
