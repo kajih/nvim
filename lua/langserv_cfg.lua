@@ -58,36 +58,15 @@ lsp_installer.settings {
   },
 }
 
+require("nvim-lsp-installer").setup {}
+local lspconfig = require("lspconfig")
+-- Example
+-- lspconfig.sumneko_lua.setup {}
+-- lspconfig.tsserver.setup {}
 
 require('go').setup()
--- Attach Rust through 'simrat39/rust-tools.nvim'
 require('rust-tools').setup({server = { on_attach = common_on_attach }})
 require("crates").setup()
-
--- Attach through "williamboman/nvim-lsp-installer"
-lsp_installer.on_server_ready(function(server)
-
-  local opts = {
-    on_attach = common_on_attach,
-    flags = {
-      debounce_text_changes = 500,
-    }
-  }
-
-  -- (optional) Customize the options passed to the server
-  -- if server.name == "tsserver" then
-  --     opts.root_dir = function() ... end
-  -- end
-
-  if server.name == "rust_analyzer" then
-    -- print("Rust-Analyzer ready; loading Rust-Tools")
-    -- require('plugins/dap') -- Debugging
-    return -- Rust-Tools have a more advanced init
-  end
-
-  server:setup(opts)
-  -- vim.cmd [[ do User LspAttachBuffers ]]
-end)
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -102,58 +81,3 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   }
 )
 
--- golang specific nvim-lsp
---[[
-
-vim.fn.sign_define('LspDiagnosticsSignError', { text = "", texthl = "LspDiagnosticsDefaultError" })
-vim.fn.sign_define('LspDiagnosticsSignWarning', { text = "", texthl = "LspDiagnosticsDefaultWarning" })
-vim.fn.sign_define('LspDiagnosticsSignInformation', { text = "", texthl = "LspDiagnosticsDefaultInformation" })
-vim.fn.sign_define('LspDiagnosticsSignHint', { text = "", texthl = "LspDiagnosticsDefaultHint" })
-
-vim.api.nvim_command('set shortmess+=c')
-vim.api.nvim_command('autocmd BufEnter,CursorHold,InsertLeave * lua vim.lsp.codelens.refresh()')
-vim.api.nvim_command('sign define LspDiagnosticsSignError text=🄴  texthl=Error linehl= numhl=')
-vim.api.nvim_command('sign define LspDiagnosticsSignWarning text=🅆  texthl=Warning linehl= numhl=')
-vim.api.nvim_command('sign define LspDiagnosticsSignInformation text=🄸  texthl=LspDiagnosticsSignInformation linehl= numhl=')
-vim.api.nvim_command('sign define LspDiagnosticsSignHint text=🄷  texthl=LspDiagnosticsSignHint linehl= numhl=')
-
-
-nvim_lsp["gopls"].setup {
-  on_attach = on_attach, 
-  flags = {
-      debounce_text_changes = 150,
-  },
-  settings = {
-      gopls = {
-        experimentalPostfixCompletions = true,
-        codelenses = {
-          test = true,
-          tidy = true,
-          upgrade_dependency = true,
-          vendor = true,
-          generate = true,
-          gc_details = true,
-       },
-     },
-   },
-}
-
-
-function goimports(wait_ms)
-  local params = vim.lsp.util.make_range_params()
-  params.context = {only = {"source.organizeImports", "textDocument/Formatting"}}
-  local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, wait_ms)
-  for _, res in pairs(result or {}) do
-    for _, r in pairs(res.result or {}) do
-      if r.edit then
-        vim.lsp.util.apply_workspace_edit(r.edit)
-      else
-        vim.lsp.buf.execute_command(r.command)
-      end
-    end
-  end
-end
-
-vim.api.nvim_command('autocmd BufWritePre *.go lua goimports(1000)')
-vim.api.nvim_command('autocmd BufWritePre *.go silent lua vim.lsp.buf.formatting()')
-]]--
