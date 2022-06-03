@@ -42,7 +42,8 @@ local common_on_attach = function(client, bufnr)
   end
 end -- //common_on_attach
 
-lsp_installer.settings {
+lsp_installer.setup ({
+  automatic_installation = true, -- automatically detect which servers to install (based on which servers are set up via lspconfig)
   ui = {
     icons = {
         server_installed = "✓",
@@ -56,17 +57,19 @@ lsp_installer.settings {
       uninstall_server = "X",
     },
   },
-}
+})
 
-require("nvim-lsp-installer").setup {}
-local lspconfig = require("lspconfig")
--- Example
--- lspconfig.sumneko_lua.setup {}
--- lspconfig.tsserver.setup {}
+local srv = lsp_installer.get_installed_servers()
+for _, lsp in pairs(srv) do
+  -- nvim_lsp[lsp.name].setup {}
+  nvim_lsp[lsp.name].setup({ on_attach = common_on_attach })
+end
 
-require('go').setup()
-require('rust-tools').setup({server = { on_attach = common_on_attach }})
-require("crates").setup()
+-- nvim_lsp.sumneko_lua.setup {}
+-- nvim_lsp.tsserver.setup {}
+-- require('go').setup()
+-- require('rust-tools').setup({server = { on_attach = common_on_attach }})
+-- require("crates").setup()
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {

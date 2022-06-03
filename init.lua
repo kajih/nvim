@@ -55,8 +55,10 @@ require('packer').startup(function()
   use 'flazz/vim-colorschemes'
   use 'norcalli/nvim-colorizer.lua'
 
-  use 'neovim/nvim-lspconfig'
-  use 'williamboman/nvim-lsp-installer'
+  use {
+    "williamboman/nvim-lsp-installer",
+    requires = { "neovim/nvim-lspconfig" },
+  }
 
   --[[ Refactoring is under heavy development currently, mostly usefull for typescript
   use {
