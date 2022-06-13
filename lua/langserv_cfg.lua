@@ -59,6 +59,10 @@ lsp_installer.setup ({
   },
 })
 
+require('go').setup()
+require('rust-tools').setup({server = { on_attach = common_on_attach }})
+require("crates").setup()
+
 local srv = lsp_installer.get_installed_servers()
 for _, lsp in pairs(srv) do
   -- nvim_lsp[lsp.name].setup {}
@@ -67,9 +71,6 @@ end
 
 -- nvim_lsp.sumneko_lua.setup {}
 -- nvim_lsp.tsserver.setup {}
--- require('go').setup()
--- require('rust-tools').setup({server = { on_attach = common_on_attach }})
--- require("crates").setup()
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
