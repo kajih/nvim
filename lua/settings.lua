@@ -34,8 +34,8 @@ utils.opt('o', 'splitright', true)
 utils.opt('o', 'termguicolors', true)
 utils.opt('o', 'joinspaces', true)
 utils.opt('o', 'list', true)        -- Show some invisible characters
-utils.opt('o', 'pumheight', 12)     -- 
-utils.opt('o', 'scrolloff', 4)      -- 
+utils.opt('o', 'pumheight', 12)     --
+utils.opt('o', 'scrolloff', 4)      --
 utils.opt('o', 'colorcolumn', tostring(width))                 -- Line length marker
 utils.opt('o', 'shiftround', true)              -- Round indent
 utils.opt('o', 'shiftwidth', indent)            -- Size of an indent

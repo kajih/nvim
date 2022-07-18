@@ -17,7 +17,7 @@ dap.adapters.lldb = {
 
 dap.configurations.cpp = {
   {
-    name = "Launch file",
+    name = "Launch file (cpp)",
     type = "lldb",
     request = "launch",
     miDebuggerPath = "gdb",
@@ -29,7 +29,6 @@ dap.configurations.cpp = {
     cwd = "${workspaceFolder}",
     stopOnEntry = true,
     args = {},
-    
     -- if you change `runInTerminal` to true, you might need to change the yama/ptrace_scope setting:
     --    echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
     -- Otherwise you might get the following error:
@@ -42,6 +41,7 @@ dap.configurations.cpp = {
 
 dap.configurations.rust = {
   {
+      name = "Launch file (rust)",
       type = 'lldb',
       request = 'launch',
       program = function()

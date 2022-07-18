@@ -27,7 +27,11 @@ api.nvim_exec(
 -------------------- PLUGINS -------------------------------
 
 local use = require('packer').use
+
 require('packer').startup(function()
+
+  -- use 'dstein64/vim-startuptime'
+  use 'nathom/filetype.nvim'
 
   use 'wbthomason/packer.nvim' -- Package manager
   use 'nvim-lua/popup.nvim'    -- not sure if deprecated
@@ -179,7 +183,9 @@ require('packer').startup(function()
 
   use {
     'SmiteshP/nvim-gps',
-    requires = 'nvim-treesitter/nvim-treesitter'
+    requires = {
+      'nvim-treesitter/nvim-treesitter'
+    }
   }
 
   use {
@@ -209,9 +215,17 @@ require('packer').startup(function()
   use 'danilamihailov/beacon.nvim'
   use 'pianocomposer321/yabs.nvim'
 
+  -- Folding
+  use {'kevinhwang91/nvim-ufo', requires = 'kevinhwang91/promise-async'}
+
 end)
 
 -------------------- PLUGIN SETUP --------------------------
+
+-- require('filetype').setup({})
+
+utils.opt('o', 'termguicolors', true)
+
 require('mapx').setup({ global = true })
 require('keymap')
 require('settings')
@@ -258,18 +272,26 @@ neogit.setup({
 })
 
 -- gitsigns / coloring / hilight
-vim.cmd 'colorscheme jellyx'
-require('gitsigns').setup()
 vim.cmd("highlight DiffAdd ctermfg=151 ctermbg=0 guifg=#33FF33 guibg=#000000")
 vim.cmd("highlight DiffDelete ctermfg=183 ctermbg=0 guifg=#FF3333 guibg=#000000")
 vim.cmd("highlight DiffChange ctermfg=181 ctermbg=0 guifg=#FFFF33 guibg=#000000")
+require('gitsigns').setup()
 require'colorizer'.setup()
 
+-------------------- CODE-FOLDING ---------------------------
+utils.opt('w', 'foldcolumn', '1')
+utils.opt('w', 'foldlevel', 99)
+utils.opt('w', 'foldenable', true)
+
+-- tell the sever the capability of foldingRange
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.foldingRange = {
+    dynamicRegistration = false,
+    lineFoldingOnly = true
+}
+require('ufo').setup()
+
 -------------------- TREE-SITTER ---------------------------
--- Code folding
-utils.opt('o', 'foldlevel', 10)
-utils.opt('o', 'foldmethod', 'expr')
-utils.opt('o', 'foldexpr', 'nvim_treesitter#foldexpr()')
 
 -- To get fzf loaded and working with telescope, you need to call
 -- load_extension, somewhere after setup function:
@@ -305,4 +327,6 @@ require("project_nvim").setup {
 -- Status line helper
 local gps = require("nvim-gps")
 gps.setup()
+
+require('plugins/dap')
 
