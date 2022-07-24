@@ -138,6 +138,7 @@ require('packer').startup(function()
     config = [[ require('snippets') ]],
   }
 
+  use 'https://git.sr.ht/~whynothugo/lsp_lines.nvim'
   use 'ray-x/lsp_signature.nvim'
   use 'romainl/vim-devdocs'
 
@@ -270,6 +271,8 @@ neogit.setup({
     },
   },
 })
+
+require("lsp_lines").setup()
 
 -- gitsigns / coloring / hilight
 vim.cmd("highlight DiffAdd ctermfg=151 ctermbg=0 guifg=#33FF33 guibg=#000000")
