@@ -272,8 +272,6 @@ neogit.setup({
   },
 })
 
-require("lsp_lines").setup()
-
 -- gitsigns / coloring / hilight
 vim.cmd("highlight DiffAdd ctermfg=151 ctermbg=0 guifg=#33FF33 guibg=#000000")
 vim.cmd("highlight DiffDelete ctermfg=183 ctermbg=0 guifg=#FF3333 guibg=#000000")
