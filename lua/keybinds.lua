@@ -34,7 +34,7 @@ vim.keymap.set('n', ']b', ':bn<CR>')
 vim.keymap.set('n', '[b', ':bp<CR>')
 
 -- Close buffer
-vim.keymap.set('n', '<leader>bd', ':bd<CR>')
+-- vim.keymap.set('n', '<leader>bd', ':bd<CR>')
 
 vim.keymap.set('n', '<leader>xh', ':<C-u>split<CR>')
 vim.keymap.set('n', '<leader>xv', ':<C-u>vsplit<CR>')
