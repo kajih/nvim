@@ -7,7 +7,6 @@ dap.adapters.lldb = {
 }
 
 dap.configurations.cpp = {
-
   {
     name = 'Launch',
 
@@ -39,6 +38,56 @@ dap.configurations.cpp = {
 
 dap.configurations.c = dap.configurations.cpp
 dap.configurations.rust = dap.configurations.cpp
+
+local function dapTarget(config)
+  local pickers = require 'telescope.pickers'
+  local finders = require 'telescope.finders'
+  local conf = require('telescope.config').values
+  local actions = require 'telescope.actions'
+  local action_state = require 'telescope.actions.state'
+  vim.api.nvim_create_user_command('DapTarget', function(opts)
+    pickers
+      .new(opts, {
+        prompt_title = 'Path to executable',
+        finder = finders.new_oneshot_job({ 'fd', '--no-ignore', '--type', 'x' }, {}),
+        sorter = conf.generic_sorter(opts),
+
+        attach_mappings = function(buffer_number)
+          actions.select_default:replace(function()
+            actions.close(buffer_number)
+            local selection = action_state.get_selected_entry()
+            config[1]['program'] = selection[1]
+          end)
+          return true
+        end,
+      })
+      :find()
+  end, { nargs = 0, bang = true })
+end
+
+-- Pick target for rust
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'rust',
+  callback = function()
+    dapTarget(dap.configurations.rust)
+  end,
+})
+
+-- Pick target for c
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'c',
+  callback = function()
+    dapTarget(dap.configurations.c)
+  end,
+})
+
+-- Pick target for cpp
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'cpp',
+  callback = function()
+    dapTarget(dap.configurations.cpp)
+  end,
+})
 
 vim.keymap.set('n', '<F3>', function()
   require('dapui').toggle()
