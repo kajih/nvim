@@ -1,6 +1,6 @@
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim.fn.system {
     'git',
     'clone',
@@ -17,8 +17,11 @@ P = function(v)
   return v
 end
 
+--vim.g.vlog_default_level = "debug"
+vim.g.log_level = 'debug'
+
 require('lazy').setup {
-  'wbthomason/packer.nvim',
+  { 'nvim-lua/plenary.nvim' },
   {
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -139,10 +142,9 @@ require('lazy').setup {
       { 'rcarriga/nvim-dap-ui', config = true },
       { 'theHamsta/nvim-dap-virtual-text', config = true },
       { 'nvim-telescope/telescope-dap.nvim', config = true },
-      { 'jay-babu/mason-nvim-dap.nvim', opts = { ensure_installed = { 'rust', 'python', 'delve', 'stylua', 'jq' } } },
     },
     config = function()
-      require('dapconfig')
+      require 'dapconfig'
     end,
   },
 }
