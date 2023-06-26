@@ -136,6 +136,7 @@ require('lazy').setup {
       { 'L3MON4D3/LuaSnip' }, -- Required
     },
   },
+  {'ray-x/go.nvim', config = true },
   {
     'mfussenegger/nvim-dap',
     dependencies = {
