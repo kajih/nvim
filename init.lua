@@ -128,7 +128,7 @@ require('lazy').setup {
     dependencies = {
       -- LSP Support
       { 'neovim/nvim-lspconfig' }, -- Required
-      { 'williamboman/mason-lspconfig.nvim' }, -- Optional
+      { 'williamboman/mason-lspconfig.nvim' },
 
       -- Autocompletion
       { 'hrsh7th/nvim-cmp' }, -- Required
@@ -136,7 +136,19 @@ require('lazy').setup {
       { 'L3MON4D3/LuaSnip' }, -- Required
     },
   },
-  {'ray-x/go.nvim', config = true },
+  { 'ray-x/go.nvim', config = true },
+  {
+    'mfussenegger/nvim-jdtls',
+    ft = 'java',
+    config = function()
+      local config = {
+        cmd = { vim.fn.stdpath 'data' .. '/mason/bin/jdtls' },
+        root_dir = vim.fs.dirname(vim.fs.find({ 'gradlew', '.git', 'mvnw' }, { upward = true })[1]),
+      }
+      require('jdtls').start_or_attach(config)
+      require('jdtls').setup_dap({ hotcodereplace = 'auto' })
+    end,
+  },
   {
     'mfussenegger/nvim-dap',
     dependencies = {

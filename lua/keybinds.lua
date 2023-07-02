@@ -18,6 +18,11 @@ vim.keymap.set('i', 'jk', '<Esc>', { silent = true })
 
 vim.keymap.set('', 'ö', '[', { remap = true })
 vim.keymap.set('', 'ä', ']', { remap = true })
+vim.keymap.set('', 'Ö', '{', { remap = true })
+vim.keymap.set('', 'Ä', '}', { remap = true })
+
+vim.keymap.set('', 'gö', 'g[', { remap = true })
+vim.keymap.set('', 'gä', 'g]', { remap = true })
 
 vim.keymap.set('n', 'J', 'mzJ`z')
 vim.keymap.set('n', '<C-d>', '<C-d>zz')

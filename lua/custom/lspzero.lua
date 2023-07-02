@@ -1,4 +1,16 @@
+local log = require('plenary.log').new { plugin = 'lspzero', level = vim.g.log_level }
+
 -- LSP
+require('mason').setup()
+require('mason-lspconfig').setup {
+  ensure_installed = {
+    'gopls',
+    'lua_ls',
+    'rust_analyzer',
+    'jdtls',
+  },
+}
+
 local lsp = require('lsp-zero').preset {
   manage_nvim_cmp = {
     set_sources = 'recommended',
@@ -8,12 +20,6 @@ local lsp = require('lsp-zero').preset {
     set_format = true,
     documentation_window = true,
   },
-}
-
-lsp.ensure_installed {
-  'gopls',
-  'lua_ls',
-  'rust_analyzer',
 }
 
 require('lspconfig').gopls.setup {
@@ -50,6 +56,14 @@ lsp.on_attach(function(client, bufnr)
   --require('lsp-inlayhints').on_attach(client, bufnr)
   require('lsp-inlayhints').on_attach(client, bufnr, false)
   require('lsp_signature').on_attach(client, bufnr)
+
+  -- if client.name == 'jdtls' then
+  --   require('jdtls').setup {
+  --     cmd = { vim.fn.stdpath 'data' .. '/mason/bin/jdtls' },
+  --   }
+  --   require('jdtls').setup_dap { hotcodereplace = 'auto' }
+  -- end
+
 end)
 
 lsp.setup()
