@@ -98,6 +98,14 @@ vim.keymap.set('t', '<A-i>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>'
 
 vim.keymap.set('n', '<leader>nf', ':Neoformat<CR>')
 
+-- LSP
+vim.keymap.set('n', '<leader>la', '<CMD>lua vim.lsp.buf.code_action()<CR>')
+vim.keymap.set('n', '<leader>li', '<CMD>:LspInfo<CR>')
+
+vim.keymap.set('n', '<F4>', function()
+  vim.lsp.buf.code_action()
+end)
+
 -- DAP keybinds
 vim.keymap.set('n', '<F3>', function()
   require('dapui').toggle()

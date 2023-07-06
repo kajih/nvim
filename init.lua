@@ -136,7 +136,9 @@ require('lazy').setup {
       { 'L3MON4D3/LuaSnip' }, -- Required
     },
   },
-  { 'ray-x/go.nvim', config = true },
+  { 'ray-x/go.nvim', dependencies = {
+    'ray-x/guihua.lua',
+  }, config = true },
   {
     'mfussenegger/nvim-jdtls',
     ft = 'java',
@@ -146,7 +148,7 @@ require('lazy').setup {
         root_dir = vim.fs.dirname(vim.fs.find({ 'gradlew', '.git', 'mvnw' }, { upward = true })[1]),
       }
       require('jdtls').start_or_attach(config)
-      require('jdtls').setup_dap({ hotcodereplace = 'auto' })
+      require('jdtls').setup_dap { hotcodereplace = 'auto' }
     end,
   },
   {
