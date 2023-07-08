@@ -22,6 +22,12 @@ local lsp = require('lsp-zero').preset {
   },
 }
 
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+capabilities.textDocument.completion.completionItem.resolveSupport = {
+  properties = { "documentation", "detail", "additionalTextEdits" },
+}
+
 require('lspconfig').gopls.setup {
   cmd = { 'gopls' },
   settings = {
@@ -47,9 +53,11 @@ require('lspconfig').gopls.setup {
       usePlaceholders = true,
     },
   },
+  capabilities = capabilities,
 }
 
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+require('lspconfig').rust_analyzer.setup({ capabilities = capabilities, })
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps { buffer = bufnr }
