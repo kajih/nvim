@@ -80,6 +80,15 @@ vim.keymap.set('n', '<leader>p4', function()
   require('harpoon.ui').nav_file(4)
 end)
 
+-- BarBar
+vim.keymap.set('n', '<A-h>', '<Cmd>BufferPrevious<CR>')
+vim.keymap.set('n', '<A-l>', '<Cmd>BufferNext<CR>')
+vim.keymap.set('n', '<A-H>', '<Cmd>BufferMovePrevious<CR>')
+vim.keymap.set('n', '<A-L>', '<Cmd>BufferMoveNext<CR>')
+vim.keymap.set('n', '<C-p>', '<Cmd>BufferPick<CR>')
+vim.keymap.set('n', '<C-c>', '<Cmd>BufferClose<CR>')
+
+-- Hop
 local hop = require 'hop'
 local directions = require('hop.hint').HintDirection
 hop.setup { keys = 'etovxqpdygfblzhckisuran' }
