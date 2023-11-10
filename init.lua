@@ -116,15 +116,26 @@ require('lazy').setup {
     },
     config = true,
   },
+
+  -- leap.nvim
+  -- sneak like, because sneak is available for eclipse and idea
   {
-    'phaazon/hop.nvim',
-    config = function()
-      require('hop').setup { keys = 'etovxqpdygfblzhckisuran' }
+    'ggandor/leap.nvim',
+    dependencies = { 'tpope/vim-repeat', keys = { '.' } },
+    config = function(_, opts)
+      local leap = require 'leap'
+      leap.add_default_mappings(true)
+      leap.add_repeat_mappings(';', ',', {
+        relative_directions = true,
+        modes = { 'n', 'x', 'o' },
+      })
+      vim.keymap.del({ 'x', 'o' }, 'x')
+      vim.keymap.del({ 'x', 'o' }, 'X')
     end,
   },
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'v2.x',
+    branch = 'v3.x',
     dependencies = {
       -- LSP Support
       { 'neovim/nvim-lspconfig' }, -- Required
@@ -171,7 +182,7 @@ require 'keybinds'
 require 'status'
 
 -- See `:help indent_blankline.txt`
-require("ibl").setup()
+require('ibl').setup()
 
 -- See `:help gitsigns.txt`
 require('gitsigns').setup {

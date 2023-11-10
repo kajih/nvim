@@ -88,19 +88,6 @@ vim.keymap.set('n', '<A-L>', '<Cmd>BufferMoveNext<CR>')
 vim.keymap.set('n', '<C-p>', '<Cmd>BufferPick<CR>')
 vim.keymap.set('n', '<C-c>', '<Cmd>BufferClose<CR>')
 
--- Hop
-local hop = require 'hop'
-local directions = require('hop.hint').HintDirection
-hop.setup { keys = 'etovxqpdygfblzhckisuran' }
-
-vim.keymap.set('', 's', function()
-  hop.hint_char1 { direction = directions.AFTER_CURSOR, current_line_only = false }
-end, { remap = true })
-
-vim.keymap.set('', 'S', function()
-  hop.hint_char1 { direction = directions.BEFORE_CURSOR, current_line_only = false }
-end, { remap = true })
-
 -- FTerm keybindinds
 vim.keymap.set('n', '<A-i>', '<CMD>lua require("FTerm").toggle()<CR>')
 vim.keymap.set('t', '<A-i>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>')
