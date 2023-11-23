@@ -8,6 +8,7 @@ require('mason-lspconfig').setup {
     'lua_ls',
     'rust_analyzer',
     'jdtls',
+    'clangd',
   },
 }
 
@@ -25,39 +26,49 @@ local lsp = require('lsp-zero').preset {
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
-  properties = { "documentation", "detail", "additionalTextEdits" },
+  properties = { 'documentation', 'detail', 'additionalTextEdits' },
 }
 
-require('lspconfig').gopls.setup {
-  cmd = { 'gopls' },
-  settings = {
-    gopls = {
-      analyses = {
-        nilness = true,
-        unusedparams = true,
-        unusedwrite = true,
-        useany = true,
-      },
-      hints = {
-        assignVariableTypes = true,
-        compositeLiteralFields = true,
-        compositeLiteralTypes = true,
-        constantValues = true,
-        functionTypeParameters = true,
-        parameterNames = true,
-        rangeVariableTypes = true,
-      },
-      experimentalPostfixCompletions = true,
-      gofumpt = true,
-      staticcheck = true,
-      usePlaceholders = true,
-    },
-  },
-  capabilities = capabilities,
-}
+require('mason-lspconfig').setup_handlers {
 
-require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
-require('lspconfig').rust_analyzer.setup({ capabilities = capabilities, })
+  function(server_name) -- default handler (optional)
+    require('lspconfig')[server_name].setup({ capabilities = capabilities })
+  end,
+
+  ['gopls'] = function()
+    require('lspconfig').gopls.setup {
+      cmd = { 'gopls' },
+      settings = {
+        gopls = {
+          analyses = {
+            nilness = true,
+            unusedparams = true,
+            unusedwrite = true,
+            useany = true,
+          },
+          hints = {
+            assignVariableTypes = true,
+            compositeLiteralFields = true,
+            compositeLiteralTypes = true,
+            constantValues = true,
+            functionTypeParameters = true,
+            parameterNames = true,
+            rangeVariableTypes = true,
+          },
+          experimentalPostfixCompletions = true,
+          gofumpt = true,
+          staticcheck = true,
+          usePlaceholders = true,
+        },
+      },
+      capabilities = capabilities,
+    }
+  end,
+
+  ['lua_ls'] = function()
+    require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+  end,
+}
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps { buffer = bufnr }
@@ -71,7 +82,6 @@ lsp.on_attach(function(client, bufnr)
   --   }
   --   require('jdtls').setup_dap { hotcodereplace = 'auto' }
   -- end
-
 end)
 
 lsp.setup()
