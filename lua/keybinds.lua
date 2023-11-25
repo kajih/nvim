@@ -9,6 +9,10 @@ vim.g.maplocalleader = ' '
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
+vim.keymap.set('n', 'Q', '@@')
+vim.keymap.set('n', 'L', '$')
+vim.keymap.set('n', 'H', '^')
+
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
@@ -23,6 +27,10 @@ vim.keymap.set('', 'Ä', '}', { remap = true })
 
 vim.keymap.set('', 'gö', 'g[', { remap = true })
 vim.keymap.set('', 'gä', 'g]', { remap = true })
+
+-- CTags go to tag
+vim.keymap.set('n', '<leader>tn', ':tn<CR>')
+vim.keymap.set('n', '<leader>tp', ':tp<CR>')
 
 vim.keymap.set('n', 'J', 'mzJ`z')
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
