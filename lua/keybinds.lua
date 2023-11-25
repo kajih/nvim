@@ -25,10 +25,13 @@ vim.keymap.set('', 'ä', ']', { remap = true })
 vim.keymap.set('', 'Ö', '{', { remap = true })
 vim.keymap.set('', 'Ä', '}', { remap = true })
 
-vim.keymap.set('', 'gö', 'g[', { remap = true })
-vim.keymap.set('', 'gä', 'g]', { remap = true })
-
 -- CTags go to tag
+vim.keymap.set('', '[g', 'g[', { noremap = true })
+vim.keymap.set('', ']g', 'g]', { noremap = true })
+vim.keymap.set('', 'gö', 'g[', { noremap = true })
+vim.keymap.set('', 'gä', 'g]', { noremap = true })
+vim.keymap.set('', ']t', ':tn<CR>', { noremap = true })
+vim.keymap.set('', '[t', ':tp<CR>', { noremap = true })
 vim.keymap.set('n', '<leader>tn', ':tn<CR>')
 vim.keymap.set('n', '<leader>tp', ':tp<CR>')
 
