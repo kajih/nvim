@@ -1,15 +1,10 @@
+-- [[ Install `lazy.nvim` plugin manager ]]
+--    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-
-if not vim.uv.fs_stat(lazypath) then
-  vim.fn.system {
-    'git',
-    'clone',
-    '--filter=blob:none',
-    'https://github.com/folke/lazy.nvim.git',
-    '--branch=stable', -- latest stable release
-    lazypath,
-  }
-end
+if not vim.loop.fs_stat(lazypath) then
+  local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
+  vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
+end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
 P = function(v)
@@ -27,8 +22,9 @@ require('lazy').setup {
     dependencies = {
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
-      { 'j-hui/fidget.nvim', tag = 'legacy' },
-      'folke/neodev.nvim',
+      'WhoIsSethDaniel/mason-tool-installer.nvim',
+      { 'j-hui/fidget.nvim', opts = {} },
+      -- 'folke/neodev.nvim',
     },
   },
   {
@@ -77,11 +73,30 @@ require('lazy').setup {
   { 'catppuccin/nvim' },
   {
     'ThePrimeagen/harpoon',
-    branch = "harpoon2",
+    branch = 'harpoon2',
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = true,
   },
   { 'sbdchd/neoformat' }, -- code format
+  { -- Autoformat
+    'stevearc/conform.nvim',
+    opts = {
+      notify_on_error = false,
+      format_on_save = {
+        timeout_ms = 500,
+        lsp_fallback = true,
+      },
+      formatters_by_ft = {
+        lua = { 'stylua' },
+        -- Conform can also run multiple formatters sequentially
+        -- python = { "isort", "black" },
+        --
+        -- You can use a sub-list to tell conform to run *until* a formatter
+        -- is found.
+        -- javascript = { { "prettierd", "prettier" } },
+      },
+    },
+  },
   { 'nvim-lualine/lualine.nvim' }, -- Fancier statusline
   { 'lukas-reineke/indent-blankline.nvim' }, -- Add indentation guides even on blank lines
 
@@ -104,7 +119,7 @@ require('lazy').setup {
   { 'kylechui/nvim-surround', config = true },
   { 'numToStr/FTerm.nvim' },
 
-  { 'lvimuser/lsp-inlayhints.nvim', branch = 'main', config = true },
+  -- { 'lvimuser/lsp-inlayhints.nvim', branch = 'main', config = true },
 
   { 'windwp/nvim-autopairs', config = true },
   { 'ray-x/lsp_signature.nvim' },
@@ -141,7 +156,6 @@ require('lazy').setup {
       -- LSP Support
       { 'neovim/nvim-lspconfig' }, -- Required
       { 'williamboman/mason-lspconfig.nvim' },
-
       -- Autocompletion
       { 'hrsh7th/nvim-cmp' }, -- Required
       { 'hrsh7th/cmp-nvim-lsp' }, -- Required
@@ -307,9 +321,3 @@ vim.diagnostic.config {
   update_in_insert = false,
   severity_sort = false,
 }
-
--- Setup neovim lua configuration
-require('neodev').setup()
-
--- Turn on lsp status information
-require('fidget').setup()

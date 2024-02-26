@@ -12,7 +12,8 @@ require('mason-lspconfig').setup {
   },
 }
 
-local lsp = require('lsp-zero').preset {
+local lsp = require 'lsp-zero'
+lsp.preset {
   manage_nvim_cmp = {
     set_sources = 'recommended',
     set_basic_mappings = true,
@@ -32,7 +33,7 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
 require('mason-lspconfig').setup_handlers {
 
   function(server_name) -- default handler (optional)
-    require('lspconfig')[server_name].setup({ capabilities = capabilities })
+    require('lspconfig')[server_name].setup { capabilities = capabilities }
   end,
 
   ['gopls'] = function()
@@ -68,12 +69,38 @@ require('mason-lspconfig').setup_handlers {
   ['lua_ls'] = function()
     require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
   end,
+
+  ['rust_analyzer'] = function()
+    require('lspconfig').rust_analyzer.setup {
+      settings = {
+        ['rust-analyzer'] = {
+          diagnostics = {
+            enable = true,
+          },
+          inlayHint = {
+            dynamicRegistration = true,
+            resolveSupport = {
+              properties = { 'textEdits', 'tooltip', 'location', 'command' },
+            },
+          },
+          checkOnSave = {
+            enable = true,
+            command = 'check',
+            extraArgs = {
+              '--target-dir',
+              '/tmp/rust-analyzer-check',
+            },
+          },
+        },
+      },
+    }
+  end,
 }
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps { buffer = bufnr }
   --require('lsp-inlayhints').on_attach(client, bufnr)
-  require('lsp-inlayhints').on_attach(client, bufnr, false)
+  -- require('lsp-inlayhints').on_attach(client, bufnr, false)
   require('lsp_signature').on_attach(client, bufnr)
 
   -- if client.name == 'jdtls' then
