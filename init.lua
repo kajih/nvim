@@ -1,7 +1,7 @@
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
   vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
 end ---@diagnostic disable-next-line: undefined-field
@@ -24,7 +24,6 @@ require('lazy').setup {
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
       { 'j-hui/fidget.nvim', opts = {} },
-      -- 'folke/neodev.nvim',
     },
   },
   {
@@ -70,6 +69,7 @@ require('lazy').setup {
   { 'tpope/vim-rhubarb' },
   { 'lewis6991/gitsigns.nvim' },
 
+  -- Theme / colors
   { 'catppuccin/nvim' },
   {
     'ThePrimeagen/harpoon',
@@ -77,8 +77,9 @@ require('lazy').setup {
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = true,
   },
+  -- Autoformat
   { 'sbdchd/neoformat' }, -- code format
-  { -- Autoformat
+  {
     'stevearc/conform.nvim',
     opts = {
       notify_on_error = false,
@@ -88,12 +89,6 @@ require('lazy').setup {
       },
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use a sub-list to tell conform to run *until* a formatter
-        -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
       },
     },
   },
@@ -118,8 +113,6 @@ require('lazy').setup {
   },
   { 'kylechui/nvim-surround', config = true },
   { 'numToStr/FTerm.nvim' },
-
-  -- { 'lvimuser/lsp-inlayhints.nvim', branch = 'main', config = true },
 
   { 'windwp/nvim-autopairs', config = true },
   { 'ray-x/lsp_signature.nvim' },
