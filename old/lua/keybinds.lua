@@ -1,4 +1,9 @@
 -- [[ Basic Keymaps ]]
+-- Set <space> as the leader key
+-- See `:help mapleader`
+--  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
 
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
@@ -12,7 +17,7 @@ vim.keymap.set('n', 'H', '^')
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
-vim.keymap.set('n', '<C-l>', '<cmd>noh<CR>', { silent = true })
+vim.keymap.set('n', '<C-l>', ':noh<CR>', { silent = true })
 vim.keymap.set('i', 'jk', '<Esc>', { silent = true })
 
 vim.keymap.set('', 'ö', '[', { remap = true })
@@ -55,11 +60,10 @@ vim.keymap.set('n', '<C-Left>', '<C-w>2>')
 vim.keymap.set('n', '<C-Right>', '<C-w>2<')
 vim.keymap.set('n', '<C-Up>', '<C-w>2-')
 
---  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<leader>h', '<cmd>wincmd h<CR>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<leader>j', '<cmd>wincmd j<CR>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<leader>k', '<cmd>wincmd k<CR>', { desc = 'Move focus to the upper window' })
-vim.keymap.set('n', '<leader>l', '<cmd>wincmd l<CR>', { desc = 'Move focus to the right window' })
+vim.keymap.set('n', '<leader>h', ':wincmd h<CR>')
+vim.keymap.set('n', '<leader>j', ':wincmd j<CR>')
+vim.keymap.set('n', '<leader>k', ':wincmd k<CR>')
+vim.keymap.set('n', '<leader>l', ':wincmd l<CR>')
 
 -- FKEYS
 vim.keymap.set('n', '<F1>', function()
@@ -104,12 +108,6 @@ vim.keymap.set('n', '<leader>nf', ':Neoformat<CR>')
 -- LSP
 vim.keymap.set('n', '<leader>la', '<CMD>lua vim.lsp.buf.code_action()<CR>')
 vim.keymap.set('n', '<leader>li', '<CMD>:LspInfo<CR>')
-
--- Diagnostic keymaps
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 vim.keymap.set('n', '<F4>', function()
   vim.lsp.buf.code_action()
