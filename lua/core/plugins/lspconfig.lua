@@ -62,17 +62,13 @@ return {
         -- tsserver = {},
 
         rust_analyzer = {
+
+          on_attach = function(_, bufnr)
+            vim.lsp.inlay_hint.enable(bufnr)
+          end,
+
           settings = {
             ['rust-analyzer'] = {
-              diagnostics = {
-                enable = true,
-              },
-              inlayHint = {
-                dynamicRegistration = true,
-                resolveSupport = {
-                  properties = { 'textEdits', 'tooltip', 'location', 'command' },
-                },
-              },
               checkOnSave = {
                 enable = true,
                 command = 'check',
