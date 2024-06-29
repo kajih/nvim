@@ -3,7 +3,7 @@ local dap = require 'dap'
 
 dap.adapters.lldb = {
   type = 'executable',
-  command = '/usr/bin/lldb-vscode-16', -- adjust as needed, must be absolute path
+  command = '/usr/bin/lldb-dap-19', -- adjust as needed, must be absolute path
   name = 'lldb',
 }
 
