@@ -15,16 +15,9 @@ vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 vim.keymap.set('n', '<C-l>', '<cmd>noh<CR>', { silent = true })
 vim.keymap.set('i', 'jk', '<Esc>', { silent = true })
 
-vim.keymap.set('', 'ö', '[', { remap = true })
-vim.keymap.set('', 'ä', ']', { remap = true })
-vim.keymap.set('', 'Ö', '{', { remap = true })
-vim.keymap.set('', 'Ä', '}', { remap = true })
-
 -- CTags go to tag
 vim.keymap.set('', '[g', 'g[', { noremap = true })
 vim.keymap.set('', ']g', 'g]', { noremap = true })
-vim.keymap.set('', 'gö', 'g[', { noremap = true })
-vim.keymap.set('', 'gä', 'g]', { noremap = true })
 vim.keymap.set('', ']t', ':tn<CR>', { noremap = true })
 vim.keymap.set('', '[t', ':tp<CR>', { noremap = true })
 vim.keymap.set('n', '<leader>tn', ':tn<CR>')

@@ -47,3 +47,5 @@ vim.wo.signcolumn = 'yes'
 
 vim.opt.termguicolors = true
 vim.opt.completeopt = 'menuone,noselect' -- Set completeopt to have a better completion experience
+
+vim.opt.langmap = 'öäÖÄ;[]{}'
