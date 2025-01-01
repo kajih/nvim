@@ -20,6 +20,12 @@ vim.keymap.set('', '[g', 'g[', { noremap = true })
 vim.keymap.set('', ']g', 'g]', { noremap = true })
 vim.keymap.set('', ']t', ':tn<CR>', { noremap = true })
 vim.keymap.set('', '[t', ':tp<CR>', { noremap = true })
+-- Langmap equ
+vim.keymap.set('', 'ög', 'g[', { noremap = true })
+vim.keymap.set('', 'äg', 'g]', { noremap = true })
+vim.keymap.set('', 'öt', ':tn<CR>', { noremap = true })
+vim.keymap.set('', 'ät', ':tp<CR>', { noremap = true })
+
 vim.keymap.set('n', '<leader>tn', ':tn<CR>')
 vim.keymap.set('n', '<leader>tp', ':tp<CR>')
 
@@ -34,8 +40,11 @@ vim.keymap.set('v', '<M-k>', ":m '<-2<CR>gv=gv")
 vim.keymap.set('n', '<M-j>', ':m +1<CR>==')
 vim.keymap.set('n', '<M-k>', ':m -2<CR>==')
 
-vim.keymap.set('n', ']b', ':bn<CR>')
 vim.keymap.set('n', '[b', ':bp<CR>')
+vim.keymap.set('n', ']b', ':bn<CR>')
+-- Langmap equ
+vim.keymap.set('n', 'öb', ':bp<CR>')
+vim.keymap.set('n', 'äb', ':bn<CR>')
 
 -- Close buffer
 -- vim.keymap.set('n', '<leader>bd', ':bd<CR>')
@@ -55,30 +64,7 @@ vim.keymap.set('n', '<leader>k', '<cmd>wincmd k<CR>', { desc = 'Move focus to th
 vim.keymap.set('n', '<leader>l', '<cmd>wincmd l<CR>', { desc = 'Move focus to the right window' })
 
 -- FKEYS
-vim.keymap.set('n', '<F1>', function()
-  require('harpoon.ui').toggle_quick_menu()
-end)
 vim.keymap.set('n', '<F2>', ':Telescope projects<CR>')
-
--- HARPOON
-vim.keymap.set('n', '<leader>pa', function()
-  require('harpoon.mark').add_file()
-end)
-vim.keymap.set('n', '<leader>pq', function()
-  require('harpoon.ui').toggle_quick_menu()
-end)
-vim.keymap.set('n', '<leader>p1', function()
-  require('harpoon.ui').nav_file(1)
-end)
-vim.keymap.set('n', '<leader>p2', function()
-  require('harpoon.ui').nav_file(2)
-end)
-vim.keymap.set('n', '<leader>p3', function()
-  require('harpoon.ui').nav_file(3)
-end)
-vim.keymap.set('n', '<leader>p4', function()
-  require('harpoon.ui').nav_file(4)
-end)
 
 -- BarBar
 vim.keymap.set('n', '<A-h>', '<Cmd>BufferPrevious<CR>')
@@ -99,8 +85,26 @@ vim.keymap.set('n', '<leader>la', '<CMD>lua vim.lsp.buf.code_action()<CR>')
 vim.keymap.set('n', '<leader>li', '<CMD>:LspInfo<CR>')
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
+-- vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
+-- vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
+
+vim.keymap.set('n', '[d', function()
+  vim.diagnostic.jump { count = -1, float = true }
+end, { desc = 'Go to previous [D]iagnostic message' })
+
+vim.keymap.set('n', ']d', function()
+  vim.diagnostic.jump { count = 1, float = true }
+end, { desc = 'Go to next [D]iagnostic message' })
+
+-- Langmap equ
+vim.keymap.set('n', 'öd', function()
+  vim.diagnostic.jump { count = -1, float = true }
+end, { desc = 'Go to previous [D]iagnostic message' })
+
+vim.keymap.set('n', 'äd', function()
+  vim.diagnostic.jump { count = 1, float = true }
+end, { desc = 'Go to next [D]iagnostic message' })
+
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
