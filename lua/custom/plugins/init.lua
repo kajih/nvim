@@ -1,19 +1,29 @@
 return {
-  -- leap.nvim
   -- sneak like, because sneak is available for eclipse and idea
   {
-    'ggandor/leap.nvim',
-    dependencies = { 'tpope/vim-repeat', keys = { '.' } },
-    config = function(_, opts)
-      local leap = require 'leap'
-      leap.add_default_mappings(true)
-      leap.add_repeat_mappings(';', ',', {
-        relative_directions = true,
-        modes = { 'n', 'x', 'o' },
-      })
-      vim.keymap.del({ 'x', 'o' }, 'x')
-      vim.keymap.del({ 'x', 'o' }, 'X')
-    end,
+    'folke/flash.nvim',
+    event = 'VeryLazy',
+    vscode = true,
+    ---@type Flash.Config
+    opts = {},
+    -- stylua: ignore
+    keys = {
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      { "S", mode = { "n", "o", "x" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+      { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+      -- Simulate nvim-treesitter incremental selection
+      { "<c-space>", mode = { "n", "o", "x" },
+        function()
+          require("flash").treesitter({
+            actions = {
+              ["<c-space>"] = "next",
+              ["<BS>"] = "prev"
+            }
+          }) 
+        end, desc = "Treesitter Incremental Selection" },
+    },
   },
   {
     'ThePrimeagen/harpoon',
