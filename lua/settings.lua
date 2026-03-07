@@ -6,9 +6,9 @@ local indent, width = 2, 120
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
-vim.b.expandtab = true
-vim.b.smartindent = true
-vim.b.tabstop = indent
+vim.opt.expandtab = true
+vim.opt.smartindent = true
+vim.opt.tabstop = indent
 
 vim.opt.number = true
 vim.opt.mouse = 'a'
