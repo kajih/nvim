@@ -1,7 +1,7 @@
 -- [[ Setting options ]]
 -- See `:help vim.o`
 
-local indent, width = 2, 120
+local indent, width = 2, 0
 
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
