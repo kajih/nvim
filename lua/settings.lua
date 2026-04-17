@@ -49,3 +49,10 @@ vim.opt.termguicolors = true
 vim.opt.completeopt = 'menuone,noselect' -- Set completeopt to have a better completion experience
 
 vim.opt.langmap = 'öäÖÄ;[]{}'
+
+-- Folding via built-in treesitter (replaces nvim-ufo)
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
+vim.opt.foldenable = true

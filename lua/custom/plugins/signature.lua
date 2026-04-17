@@ -1,3 +1,2 @@
-return {
-  { 'ray-x/lsp_signature.nvim', opts = {} },
-}
+-- lsp_signature.nvim removed: blink.cmp handles signature help natively (signature.enabled = true)
+return {}

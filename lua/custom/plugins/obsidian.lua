@@ -5,10 +5,11 @@ return {
   ---@module 'obsidian'
   ---@type obsidian.config
   opts = {
+    legacy_commands = false,
     workspaces = {
       {
         name = 'personal',
-        path = '~/Documents/vaults/personal',
+        path = vim.fn.expand '~/Documents/vaults/personal',
       },
     },
   },
