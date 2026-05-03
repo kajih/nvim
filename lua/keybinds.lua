@@ -63,21 +63,11 @@ vim.keymap.set('n', '<leader>j', '<cmd>wincmd j<CR>', { desc = 'Move focus to th
 vim.keymap.set('n', '<leader>k', '<cmd>wincmd k<CR>', { desc = 'Move focus to the upper window' })
 vim.keymap.set('n', '<leader>l', '<cmd>wincmd l<CR>', { desc = 'Move focus to the right window' })
 
--- FKEYS
--- <F2> removed: telescope-projects not installed (use <leader>ff or Telescope find_files)
-vim.keymap.set('n', '<F2>', function()
-  vim.notify('<F2> (Telescope projects) — plugin not installed, use <leader>ff', vim.log.levels.WARN)
-end, { desc = 'Removed: telescope-projects not installed' })
-
 -- FTerm keybindings
 vim.keymap.set('n', '<A-i>', '<CMD>lua require("FTerm").toggle()<CR>')
 vim.keymap.set('t', '<A-i>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>')
 
 -- LSP
--- <leader>la superseded by Neovim 0.11 default gra (code action)
-vim.keymap.set('n', '<leader>la', function()
-  vim.notify('<leader>la → use gra (Neovim 0.11 default: code action)', vim.log.levels.WARN)
-end, { desc = 'Renamed: use gra' })
 vim.keymap.set('n', '<leader>li', '<CMD>LspInfo<CR>')
 
 -- Diagnostic keymaps
@@ -100,11 +90,6 @@ end, { desc = 'Go to next [D]iagnostic message' })
 
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
-
--- <F4> superseded by Neovim 0.11 default gra (code action)
-vim.keymap.set('n', '<F4>', function()
-  vim.notify('<F4> → use gra (Neovim 0.11 default: code action)', vim.log.levels.WARN)
-end, { desc = 'Renamed: use gra' })
 
 -- DAP keybinds
 vim.keymap.set('n', '<F3>', function()

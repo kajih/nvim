@@ -19,13 +19,14 @@ ctrl+k - move line up with indent
 
 ## Harpoon
 Quick navigation between project files, expands LSP
-<F1> - UI
 <leader>pa - add file
-<leader>pq - menu toggle
-<leader>p1 - file 1
-<leader>p2
-<leader>p3
-<leader>p4
+<C-e>     - menu toggle
+<C-h>     - file 1
+<C-t>     - file 2
+<C-n>     - file 3
+<C-s>     - file 4
+<C-S-P>   - prev in list
+<C-S-N>   - next in list
 
 ## Comment
 Quickly toggle comments on a section.

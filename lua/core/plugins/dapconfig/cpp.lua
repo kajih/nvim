@@ -1,4 +1,3 @@
-local log = require('plenary.log').new { plugin = 'dapconfig', level = vim.g.log_level }
 local dap = require 'dap'
 
 dap.adapters.lldb = {
