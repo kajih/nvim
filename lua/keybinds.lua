@@ -91,6 +91,11 @@ end, { desc = 'Go to next [D]iagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+-- vim-indentwise: jump to next/previous line with equal indent
+-- Langmap equ
+vim.keymap.set({ 'n', 'x', 'o' }, 'öj', '<Plug>(IndentWiseNextEqualIndent)', { remap = true, desc = 'Next line with equal indent' })
+vim.keymap.set({ 'n', 'x', 'o' }, 'ök', '<Plug>(IndentWisePreviousEqualIndent)', { remap = true, desc = 'Previous line with equal indent' })
+
 -- DAP keybinds
 vim.keymap.set('n', '<F3>', function()
   require('dapui').toggle()
